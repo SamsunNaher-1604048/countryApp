@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Country from './Component/Country'
+import './App.css'
+import Search from './Component/Search'
 const url= 'https://restcountries.com/v3.1/all'
 const App = () => {
 
@@ -24,18 +26,36 @@ const App = () => {
     }
   }
 
+  const onRemoveCountruy=(name)=>{
+    const filter = countries.filter((con)=>con.name.common!==name)
+    Setcountries(filter)
+    
+  }
+
+  const ConSearch=(search)=>{
+
+   const Searchcountry = countries.filter((con)=>{
+    let conname=con.name.common.toLowerCase()
+    return conname.startsWith(search)
+   })
+   Setcountries(Searchcountry)
+   
+  }
+
 
   useEffect(()=>{
     fatchData(url)
-    console.log(countries)
   },[ ])
+
+  
 
   return (
     <>
       <h1>Country App</h1>
+      <Search  ConSearch={ConSearch}/>
       {islodding && <h2>Lodding...</h2>}
       {error && <h2>{error.message}</h2>}
-      {countries&&<Country countries={countries}/>}
+      {countries&&<Country countries={countries}  onRemove={onRemoveCountruy}/>}
     </>
   )
 }
